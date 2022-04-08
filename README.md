@@ -35,11 +35,11 @@ Then we need to register on tinybird (seriously the ui is so good I will skip it
 
 # 2.Transforming the data
 
-When we get all the data we will be able to generate a pipeline. THe pipelines are just like notebook cells and they can be easy parametizable. But this will be better done with an example.
+When we get all the data we will be able to generate a pipeline. Quoting: "Pipelines are just like notebook cells" and they can be easy parametizable. But this will be better shown with an example.
 
-I want an endpoint that given the current stop I'm intered in, the proper date and time, show me the next 5 five "guaguas" (buses for the non cuban - canarian people) incoming. 
+I want: An endpoint that given the current stop I'm interested in, the proper date and time, returns me the next 5 five "guaguas" (buses for the non cuban - canarian people) that will arrive to that stop. 
 
-So... Let's write the query, for the sake of avoiding transformations of parameters I'm considering that the callers is splitting the date time into two params as the calendar dates use the yyyymmdd and the stop times uses only the HH:MM:SS (so i don't have to deal with the +24 hours)
+So... Let's write the query, for the sake of avoiding parameter parsing I'm considering that the caller is splitting the datetime into two params as the calendar dates use the yyyymmdd and the stop times uses only the HH:MM:SS (so i don't have to deal with the +24 hours)
 
 ```
 %
@@ -55,11 +55,14 @@ order by arrival
 limit 5
 ```
 
-In the query there are two params defined using the template tinybird provides and we perform all the needed input params at once.
+In the query there are two parameters defined using the template tinybird provides and all the query is done at once.
+
+So we click on "publish as api" and that's it. We got an api. (I also expected some more steps, but no, seriously, that's all).
 
 # 3. Exploring results
 
 Now that is ready I want to try it, I will start downloading postman and then...
+
 Oh wait, tinybird includes swagger! (Just click in view api on top right and then 'open in swagger' and the bottom)
 
 ![loading data](./imgs/swagger.png)

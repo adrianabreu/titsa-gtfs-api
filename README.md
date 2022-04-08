@@ -33,6 +33,8 @@ Then we need to register on tinybird (seriously the ui is so good I will skip it
 
 ![loading data](./imgs/loading-data-source.png)
 
+# 2.Transforming the data
+
 When we get all the data we will be able to generate a pipeline. THe pipelines are just like notebook cells and they can be easy parametizable. But this will be better done with an example.
 
 I want an endpoint that given the current stop I'm intered in, the proper date and time, show me the next 5 five "guaguas" (buses for the non cuban - canarian people) incoming. 
@@ -54,6 +56,8 @@ limit 5
 ```
 
 In the query there are two params defined using the template tinybird provides and we perform all the needed input params at once.
+
+# 3. Exploring results
 
 Now that is ready I want to try it, I will start downloading postman and then...
 Oh wait, tinybird includes swagger! (Just click in view api on top right and then 'open in swagger' and the bottom)

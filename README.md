@@ -1,8 +1,12 @@
 # titsa-gtfs-api
 
+
+
 This brief project exposes the current open data available from [Titsa](https://transitfeeds.com/p/transportes-interurbanos-de-tenerife/1058) (Bus Service on Tenerife)
 
 And for getting that wonderful system working I'm using [tinybird](https://www.tinybird.co/)
+
+Note: I found the cli so easy to use that most of the samples have been adapted to use the cli interally and pount to the docs. 
 
 If you register on tinybird the free tier would be enough. 
 
@@ -16,7 +20,9 @@ Advantages:
 
 # 1.Loading data
 
-If we go to the transitfeed url we will be able to download the last dataset available (in my case April1st). Also you can go to the oficcial titsa page and use this script I used for analysis: https://github.com/adrianabreu/titsa-gtfs-exploration/blob/master/download.sh
+UI: 
+
+If we go to the transitfeed url we will be able to download the last dataset available (in my case April 1st). Also you can go to the oficial titsa page and use this script I used for analysis: https://github.com/adrianabreu/titsa-gtfs-exploration/blob/master/download.sh
 
 When we get the internal files we should rename then to csv, we will use everyone but the agency:
 
@@ -29,11 +35,24 @@ When we get the internal files we should rename then to csv, we will use everyon
 |_trips.csv
 ```
 
-Then we need to register on tinybird (seriously the ui is so good I will skip it that part ) and start adding the files as data sources>
+Then we need to register on tinybird (seriously the ui is so good I will skip it that part and also [here is the official guide](https://www.tinybird.co/guide/intro-to-ingesting-data)) and start adding the files as data sources>
 
 ![loading data](./imgs/loading-data-source.png)
 
+Auotamic:
+
+Clone the repo and start docker compose. It uses the [tinybird oficial docker image](https://docs.tinybird.co/cli.html#option-2-use-a-prebuilt-docker-image)
+
+Configure the auth as shown [here](https://docs.tinybird.co/cli.html#authenticate) (Again the oficial docs are so good)
+
+Launch the command './scripts/load-batch-titsa.sh'
+
+This will download the zip file from TITSA's webpage unzip it and load all the data files into tinybird as sources.
+
+
 # 2.Transforming the data
+
+## UI
 
 When we get all the data we will be able to generate a pipeline. Quoting: "Pipelines are just like notebook cells" and they can be easy parametizable. But this will be better shown with an example.
 
@@ -58,6 +77,19 @@ limit 5
 In the query there are two parameters defined using the template tinybird provides and all the query is done at once.
 
 So we click on "publish as api" and that's it. We got an api. (I also expected some more steps, but no, seriously, that's all).
+
+## Automatically 
+Now I'm going to transform the data as a typical query could be, ok, so where does this line goes? Does this line goes through that stop? 
+For that tinybird recommends using a [**materialized view**](https://www.tinybird.co/guide/materialized-views)
+
+The following bash script './scripts/generate-stops-per-line.sh' will:
+
+1. Create a new data source with the desired relation - line / stop_id so we can get all the codes for each line
+2. Create a pipe performing the desired query
+3. Push both the data source and the filling pipe against tinybird
+4. Set up and endpoint for querying the new data source with the desired parameter. 
+
+Yeah all in a single script with most of the data being strings.
 
 # 3. Exploring results
 
@@ -121,3 +153,6 @@ And here I'm looking for the buses for going to college are over again!
   }
 }
 ```
+
+From the automatic pipeline:
+![loading data](./imgs/automatic_swagger.png)

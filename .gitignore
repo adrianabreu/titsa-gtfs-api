@@ -1,3 +1,5 @@
 .tinyb
 tmp_data
 datasources/*
+__pycache__
+load_realtime/*

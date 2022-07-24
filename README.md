@@ -39,7 +39,7 @@ Then we need to register on tinybird (seriously the ui is so good I will skip it
 
 ![loading data](./imgs/loading-data-source.png)
 
-Auotamic:
+Autoamic:
 
 Clone the repo and start docker compose. It uses the [tinybird oficial docker image](https://docs.tinybird.co/cli.html#option-2-use-a-prebuilt-docker-image)
 

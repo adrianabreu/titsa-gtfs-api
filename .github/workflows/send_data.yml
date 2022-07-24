@@ -9,6 +9,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - run: sudo apt-get install libxml2-utils
       - run: ./scripts/load-realtime-titsa.sh
         env:
           TITSA_TOKEN: ${{ secrets.TITSA_TOKEN }}

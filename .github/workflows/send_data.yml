@@ -1,0 +1,14 @@
+name: Push Data To TinyBird
+on:
+  schedule:
+    - cron: */20 * * * *
+jobs:
+  run bash:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: ./scripts/load-realtime-titsa.sh
+        env:
+          TITSA_TOKEN: ${{ secrets.TITSA_TOKEN }}
+          TINYBIRD_TOKEN: ${{ secrets.TINYBIRD_TOKEN }}

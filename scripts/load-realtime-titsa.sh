@@ -2,13 +2,10 @@ TITSA_URL=http://apps.titsa.com/apps/apps_sae_llegadas_parada.asp
 STOP_ID=1918
 
 ANSWER="$(curl -i --no-progress-meter -X GET "$TITSA_URL?idApp=$TITSA_TOKEN&idParada=$STOP_ID")"
-echo "$ANSWER"
 STATUS=$(echo "$ANSWER" | grep HTTP |  awk '{print $2}')
 STATUSCASTED=$(($STATUS + 0))
-BODY=$(echo "$ANSWER" | grep "<?xml" | awk -F '[:blank:]\\<' '{print $1}') 
-echo "Body"
+BODY=$(echo "$ANSWER" | grep "<?xml" | awk -F '\\>[:blank:]\\<' '{print $1}') 
 echo "$BODY"
-echo "End body"
 if [ $STATUSCASTED -eq 200 ]
 then
 

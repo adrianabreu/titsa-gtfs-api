@@ -1,5 +1,6 @@
 name: Push Data To TinyBird
 on:
+  push:
   schedule:
     - cron: "*/20 * * * *"
 jobs:

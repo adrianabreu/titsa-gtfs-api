@@ -4,8 +4,7 @@ STOP_ID=1918
 ANSWER="$(curl -i --no-progress-meter -X GET "$TITSA_URL?idApp=$TITSA_TOKEN&idParada=$STOP_ID")"
 STATUS=$(echo "$ANSWER" | grep HTTP |  awk '{print $2}')
 STATUSCASTED=$(($STATUS + 0))
-BODY=$(echo "$ANSWER" | grep "<?xml" | awk -F '\\>[:blank:]\\<' '{print $1}') 
-echo "$BODY"
+BODY=$(echo "$ANSWER" | grep "<?xml") 
 if [ $STATUSCASTED -eq 200 ]
 then
 

@@ -5,9 +5,10 @@ ANSWER="$(curl -i --no-progress-meter -X GET "$TITSA_URL?idApp=$TITSA_TOKEN&idPa
 echo "$ANSWER"
 STATUS=$(echo "$ANSWER" | grep HTTP |  awk '{print $2}')
 STATUSCASTED=$(($STATUS + 0))
-BODY=$(echo "$ANSWER" | grep "<?xml" | awk -F' \\<' '{print $1}') 
-
+BODY=$(echo "$ANSWER" | grep "<?xml" | awk -F ' \\<' '{print $1}') 
+echo "Body"
 echo "$BODY"
+echo "End body"
 if [ $STATUSCASTED -eq 200 ]
 then
 

@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "*/20 * * * *"
 jobs:
-  run bash:
+  run-bash:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code

@@ -10,9 +10,9 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: setup python
-          uses: actions/setup-python@v2
-          with:
-            python-version: 3.9 #install the python needed
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9 #install the python needed
       - name: execute py script # run the run.py to get the latest data
         run: |
           python load_realtime.pyz

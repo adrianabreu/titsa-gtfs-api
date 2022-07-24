@@ -1,0 +1,16 @@
+name: Push Data To TinyBird
+on:
+  push:
+  schedule:
+    - cron: "*/20 5-23 * * *"
+jobs:
+  run-bash:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: sudo apt-get update && sudo apt-get install libxml2-utils
+      - run: ./scripts/load-realtime-titsa.sh
+        env:
+          TITSA_TOKEN: ${{ secrets.TITSA_TOKEN }}
+          TINYBIRD_TOKEN: ${{ secrets.TINYBIRD_TOKEN }}

@@ -8,7 +8,7 @@ if __name__ == '__main__':
     titsa_token = os.getenv('TITSA_TOKEN')
     stop_id = 1918
     titsa_url = f"http://apps.titsa.com/apps/apps_sae_llegadas_parada.asp?idApp={titsa_token}&idParada={stop_id}"
-    tinybird_url = "https://api.tinybird.co/v0/datasources?format=ndjson&name=realtime&mode=append"
+    tinybird_url = "https://api.tinybird.co/v0/events?name=realtime"
     tinybird_token = os.getenv('TINYBIRD_TOKEN')
 
     response = requests.get(titsa_url)

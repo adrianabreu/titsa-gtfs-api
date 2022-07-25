@@ -15,9 +15,9 @@ if __name__ == '__main__':
 
     if response.status_code == 200:
         response = xmltodict.parse(response.content)
-        if llegadas not in response:
+        if "llegadas" not in response:
             sys.exit(f"Empty Titsa API answer")
-        if response["llegas"] is None:
+        if response["llegadas"] is None:
             sys.exit(f"Empty Titsa API answer")
 
         for arrival in response["llegadas"]:

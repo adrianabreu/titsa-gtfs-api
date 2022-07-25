@@ -24,12 +24,12 @@ if __name__ == '__main__':
             body = response["llegadas"][arrival]
             mins_next_arrival = response["llegadas"][arrival]["minutosParaLlegar"]
             arrival_time = datetime.strptime(body["hora"], '%d/%m/%Y %H:%M:%S') + timedelta(minutes=int(mins_next_arrival))
-            append_response = requests.post(url=tinybird_url, data={
+            append_response = requests.post(url=tinybird_url, data=json.dumps({
                 "line": body["linea"],
                 "stop_id": body["codigoParada"],
                 "calendar_date": arrival_time.strftime("%Y%m%d"),
                 "arrival_time": arrival_time.strftime("%H:%M:%S")
-            },headers= {"Authorization": f"Bearer {tinybird_token}"})
+            }),headers= {"Authorization": f"Bearer {tinybird_token}"})
             print(f"Data appended {append_response.status_code}")
     else:
         sys.exit(f"Titsa API unavailable {response.status_code}")

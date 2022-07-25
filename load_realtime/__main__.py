@@ -15,16 +15,21 @@ if __name__ == '__main__':
 
     if response.status_code == 200:
         response = xmltodict.parse(response.content)
+        if llegadas not in response:
+            sys.exit(f"Empty Titsa API answer")
+        if response["llegas"] is None:
+            sys.exit(f"Empty Titsa API answer")
+
         for arrival in response["llegadas"]:
             body = response["llegadas"][arrival]
             mins_next_arrival = response["llegadas"][arrival]["minutosParaLlegar"]
             arrival_time = datetime.strptime(body["hora"], '%d/%m/%Y %H:%M:%S') + timedelta(minutes=int(mins_next_arrival))
-            requests.post(url=tinybird_url, data={
+            append_response = requests.post(url=tinybird_url, data={
                 "line": body["linea"],
                 "stop_id": body["codigoParada"],
                 "calendar_date": arrival_time.strftime("%Y%m%d"),
                 "arrival_time": arrival_time.strftime("%H:%M:%S")
             },headers= {"Authorization": f"Bearer {tinybird_token}"})
-            print("Data appended")
+            print(f"Data appended {append_response.status_code}")
     else:
         sys.exit(f"Titsa API unavailable {response.status_code}")

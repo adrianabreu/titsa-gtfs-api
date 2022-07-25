@@ -25,7 +25,7 @@ if __name__ == '__main__':
             mins_next_arrival = response["llegadas"][arrival]["minutosParaLlegar"]
             arrival_time = datetime.strptime(body["hora"], '%d/%m/%Y %H:%M:%S') + timedelta(minutes=int(mins_next_arrival))
             append_response = requests.post(url=tinybird_url, data=json.dumps({
-                "line": +body["linea"],
+                "line": int(body["linea"]),
                 "stop_id": body["codigoParada"],
                 "calendar_date": arrival_time.strftime("%Y%m%d"),
                 "arrival_time": arrival_time.strftime("%H:%M:%S")

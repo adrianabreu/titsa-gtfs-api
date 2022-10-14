@@ -13,12 +13,12 @@ def extract_titsa_data(titsa_token, stop_id):
     if response.status_code == 200:
         response = xmltodict.parse(response.content)
         if ARRIVALS_KEY not in response or response[ARRIVALS_KEY] is None:
-            sys.exit(f"Empty Titsa API answer")
+            return (response.status_code, None)
         else:
             print(response)
-            return response[ARRIVALS_KEY]
+            return (response.status_code, response[ARRIVALS_KEY])
     else:
-        sys.exit(f"Titsa API unavailable {response.status_code}")
+        return (response.status_code, None)
 
 def parse_arrival_into_json(arrival):
     mins_next_arrival = arrival["minutosParaLlegar"]
@@ -34,12 +34,22 @@ def publish_data(token, data):
     TINYBIRD_URL = "https://api.tinybird.co/v0/events?name=realtime"
     return requests.post(url=TINYBIRD_URL, data=json.dumps(data),headers= {"Authorization": f"Bearer {token}"})
 
+def log_call(token, arrivals):
+    TINYBIRD_URL = "https://api.tinybird.co/v0/events?name=titsa_api-status"
+    data = { 
+        "ts": datetime.now(),
+        "status_code": arrivals[0] ,
+        "empty": 1 if arrivals[1] is None else 1
+    } 
+    return requests.post(url=TINYBIRD_URL, data=json.dumps(data),headers= {"Authorization": f"Bearer {token}"})
+
 if __name__ == '__main__':
     TITSA_TOKEN = os.getenv('TITSA_TOKEN')
     STOP_ID = 1918
     TINYBIRD_TOKEN = os.getenv('TINYBIRD_TOKEN') 
-    arrivals = extract_titsa_data(TITSA_TOKEN, STOP_ID)
-    
+    response = extract_titsa_data(TITSA_TOKEN, STOP_ID)
+    log_call(token, response)
+    arrivals = response[1]
     for arrival in arrivals:
         parsed_arrival = parse_arrival_into_json(arrivals[arrival])
         append_response = publish_data(TINYBIRD_TOKEN, parsed_arrival) 

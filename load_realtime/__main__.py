@@ -13,10 +13,10 @@ def extract_titsa_data(titsa_token, stop_id):
     if response.status_code == 200:
         response = xmltodict.parse(response.content)
         if ARRIVALS_KEY not in response or response[ARRIVALS_KEY] is None:
-            return (response.status_code, None)
+            return (200, None)
         else:
             print(response)
-            return (response.status_code, response[ARRIVALS_KEY])
+            return (200, response[ARRIVALS_KEY])
     else:
         return (response.status_code, None)
 
@@ -37,7 +37,7 @@ def publish_data(token, data):
 def log_call(token, arrivals):
     TINYBIRD_URL = "https://api.tinybird.co/v0/events?name=titsa_api-status"
     data = { 
-        "ts": datetime.now(),
+        "ts": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
         "status_code": arrivals[0] ,
         "empty": 1 if arrivals[1] is None else 1
     } 
@@ -45,13 +45,19 @@ def log_call(token, arrivals):
 
 if __name__ == '__main__':
     TITSA_TOKEN = os.getenv('TITSA_TOKEN')
-    STOP_ID = 1918
-    TINYBIRD_TOKEN = os.getenv('TINYBIRD_TOKEN') 
-    response = extract_titsa_data(TITSA_TOKEN, STOP_ID)
-    log_call(token, response)
-    arrivals = response[1]
-    for arrival in arrivals:
-        parsed_arrival = parse_arrival_into_json(arrivals[arrival])
-        append_response = publish_data(TINYBIRD_TOKEN, parsed_arrival) 
-        print(f"Data appended {append_response.status_code}")
+    STOP_IDS = [1918, 2393, 1195, 2625, 9181]
+    TINYBIRD_TOKEN = os.getenv('TINYBIRD_TOKEN')
+
+    for stop_id in STOP_IDS:
+        response = extract_titsa_data(TITSA_TOKEN, stop_id)
+        log_call(TINYBIRD_TOKEN, response)
+        # that tecnical debt
+        arrivals = response[1]
+        if (arrivals is not None): 
+            arrivals = arrivals["llegada"]
+            arrivals = arrivals if (isinstance(arrivals, list)) else [arrivals]
+            for arrival in arrivals:
+                parsed_arrival = parse_arrival_into_json(arrival)
+                append_response = publish_data(TINYBIRD_TOKEN, parsed_arrival) 
+                print(f"Data appended {append_response.status_code}")
 

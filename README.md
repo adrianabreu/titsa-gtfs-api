@@ -39,7 +39,7 @@ Then we need to register on tinybird (seriously the ui is so good I will skip it
 
 ![loading data](./imgs/loading-data-source.png)
 
-Autoamic:
+Automatic:
 
 Clone the repo and start docker compose. It uses the [tinybird oficial docker image](https://docs.tinybird.co/cli.html#option-2-use-a-prebuilt-docker-image)
 
@@ -156,3 +156,80 @@ And here I'm looking for the buses for going to college are over again!
 
 From the automatic pipeline:
 ![loading data](./imgs/automatic_swagger.png)
+
+
+# 4. Realtime Data
+
+Now that we loaded the gtfs format we need to get compare it against the real data. Tisa has a [public API](), you will need to rquest a token from it.
+
+
+## Loading data
+
+We will take advantage of the free minutes github gives us. You can see the **load_realtime** folder. Inside, there is a python module with all the needed data. It parses the xml response and feeds two data_sources in tinybird: one with the realtime and the other one with statistics about the api fails. (It fails a lot and I'm tired of getting alerts, so I'm going to check that data).
+
+You can see how the python module is loaded in the .github/workflows folder. But it is quite simple, the trick here for saving time is to build the project with its dependencies locally so it takes a few seconds to make the call. 
+
+You can do this with the following commands:
+
+`pip install -r requirements.txt --target load_realtime`
+`python -m zipapp load_realtime`
+
+With this we will bne gneerating a load_realtime.pyz file that will have all the deps.
+A typical execution will took about 20 secs. Github provides 2000 build minutes free per months, so we will be able to launch about 200 requests per day. 
+
+## Checking the results
+
+I have used the neighbor function for grabbing all the estimated data and compared it against the guesses. You can see the query in the scripts file. Over there I just created a pipe that grabs two dates. Here is a sample response from the api call:
+
+```
+{
+  "meta": [
+    {
+      "name": "date",
+      "type": "String"
+    },
+    {
+      "name": "acc_diff_in_seconds",
+      "type": "Nullable(Int64)"
+    }
+  ],
+  "data": [
+    {
+      "date": "2022-10-07",
+      "acc_diff_in_seconds": 9722
+    },
+    {
+      "date": "2022-10-09",
+      "acc_diff_in_seconds": 578
+    },
+    {
+      "date": "2022-10-08",
+      "acc_diff_in_seconds": 924
+    },
+    {
+      "date": "2022-10-06",
+      "acc_diff_in_seconds": 9760
+    },
+    {
+      "date": "2022-10-04",
+      "acc_diff_in_seconds": 9495
+    },
+    {
+      "date": "2022-10-03",
+      "acc_diff_in_seconds": 10468
+    },
+    {
+      "date": "2022-10-05",
+      "acc_diff_in_seconds": 10288
+    }
+  ],
+  "rows": 7,
+  "statistics": {
+    "elapsed": 0.126348496,
+    "rows_read": 2441666,
+    "bytes_read": 68676194
+  }
+}
+```
+
+I will try to draw a frontend with this!

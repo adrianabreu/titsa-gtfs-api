@@ -2,7 +2,7 @@ name: Push Data To TinyBird
 on:
   push:
   schedule:
-    - cron: "*/20 5-23 * * *"
+    - cron: "*/10 3-21 * * *"
 jobs:
   run-bash:
     runs-on: ubuntu-latest

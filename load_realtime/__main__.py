@@ -3,10 +3,8 @@ import json
 import xmltodict
 from datetime import datetime, timedelta
 import os
-import sys
 
 def extract_titsa_data(titsa_token, stop_id): 
-    print(titsa_token)
     titsa_url = f"http://apps.titsa.com/apps/apps_sae_llegadas_parada.asp?idApp={titsa_token}&idParada={stop_id}"
     response = requests.get(titsa_url)
     ARRIVALS_KEY = "llegadas"
@@ -15,7 +13,6 @@ def extract_titsa_data(titsa_token, stop_id):
         if ARRIVALS_KEY not in response or response[ARRIVALS_KEY] is None:
             return (200, None)
         else:
-            print(response)
             return (200, response[ARRIVALS_KEY])
     else:
         return (response.status_code, None)
@@ -51,13 +48,12 @@ if __name__ == '__main__':
     for stop_id in STOP_IDS:
         response = extract_titsa_data(TITSA_TOKEN, stop_id)
         log_call(TINYBIRD_TOKEN, response)
-        # that tecnical debt
+
         arrivals = response[1]
         if (arrivals is not None): 
+            print(arrivals)
             arrivals = arrivals["llegada"]
             arrivals = arrivals if (isinstance(arrivals, list)) else [arrivals]
             for arrival in arrivals:
                 parsed_arrival = parse_arrival_into_json(arrival)
-                append_response = publish_data(TINYBIRD_TOKEN, parsed_arrival) 
-                print(f"Data appended {append_response.status_code}")
-
+                append_response = publish_data(TINYBIRD_TOKEN, parsed_arrival)

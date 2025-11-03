@@ -1,0 +1,6 @@
+﻿route_id,agency_id,route_short_name,route_long_name,route_type,route_url,route_color,route_text_color
+247,2,10,SANTA CRUZ AEROPUERTO DEL SUR TFS,3,http://www.titsa.com/index.php/tus-guaguas/lineas-y-horarios/linea-010,75AD1C,000000
+13,2,11,LA LAGUNA - EL SAUZAL POR EL CALVARIO DE TACORONTE,3,http://www.titsa.com/index.php/tus-guaguas/lineas-y-horarios/linea-011,75AD1C,000000
+14,2,12,LA LAGUNA - EL SAUZAL - POR ZONA CENTRO DE TACORONTE,3,http://www.titsa.com/index.php/tus-guaguas/lineas-y-horarios/linea-012,75AD1C,000000
+15,2,14,SANTA CRUZ - LA LAGUNA  POR LA CUESTA,3,http://www.titsa.com/index.php/tus-guaguas/lineas-y-horarios/linea-014,75AD1C,000000
+16,2,15,SANTA CRUZ - LA LAGUNA DIRECTA,3,http://www.titsa.com/index.php/tus-guaguas/lineas-y-horarios/linea-015,75AD1C,000000

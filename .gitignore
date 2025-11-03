@@ -1,0 +1,3 @@
+.trigger
+batch_job/Google_transit/*
+node_modules/*

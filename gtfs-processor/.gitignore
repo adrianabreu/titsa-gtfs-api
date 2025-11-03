@@ -1,0 +1,15 @@
+# Binary
+gtfs-processor
+gtfs-processor-linux
+
+# Output files
+output/
+*.parquet
+
+# Test files
+testdata/test_output.parquet
+testdata/test_upload.parquet
+
+# Go
+go.sum
+
